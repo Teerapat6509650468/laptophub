@@ -71,12 +71,12 @@ cd laptophub
 - **บน Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **บน Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-store
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 #### รัน Laptop Customer
@@ -245,24 +245,24 @@ cd laptophub
 - **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **On Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-store
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 #### Run Laptop Customer
 - **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-customer
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **On Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-customer
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 ---
