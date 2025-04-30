@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laptop Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Laptop Store</h1>
+        <div class="text-center mt-4">
+            <button id="fetchCustomersBtn" class="btn btn-primary">Fetch All Customers</button>
+            <button id="addCustomerBtn" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCustomerModal">Add Customer</button>
+        </div>
+        <div class="mt-4">
+            <h3>Customer List</h3>
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                    <!-- Customer rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Customer Modal -->
+    <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCustomerModalLabel">Add Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCustomerForm">
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="customerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="customerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="customerPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="customerAddress" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success">Add Customer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+		document.getElementById('fetchCustomersBtn').addEventListener('click', fetchCustomers);
+		document.getElementById('addCustomerForm').addEventListener('submit', addCustomer);
+
+		function fetchCustomers() {
+			fetch('http://localhost:8080/client/customers')
+				.then(response => response.json())
+				.then(customers => {
+					const customerTableBody = document.getElementById('customerTableBody');
+					customerTableBody.innerHTML = ''; // Clear the table body
+					customers.forEach((customer, index) => {
+						const row = document.createElement('tr');
+						row.innerHTML = `
+							<td>${index + 1}</td>
+							<td>${customer.name}</td>
+							<td>${customer.email}</td>
+							<td>${customer.phone}</td>
+							<td>${customer.address}</td>
+						`;
+						customerTableBody.appendChild(row);
+					});
+				})
+				.catch(error => console.error('Error fetching customers:', error));
+		}
+        
+		function addCustomer(event) {
+		event.preventDefault();
+		const name = document.getElementById('customerName').value;
+		const email = document.getElementById('customerEmail').value;
+		const phone = document.getElementById('customerPhone').value;
+		const address = document.getElementById('customerAddress').value;
+
+		fetch('http://localhost:8080/client/customers/add', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ name, email, phone, address }),
+		})
+			.then(response => {
+				if (response.ok) {
+					alert('Customer added successfully!');
+					document.getElementById('addCustomerForm').reset();
+					fetchCustomers(); // Refresh the customer list
+					const modal = bootstrap.Modal.getInstance(document.getElementById('addCustomerModal'));
+					modal.hide();
+				} else {
+					alert('Failed to add customer.');
+				}
+			})
+			.catch(error => console.error('Error adding customer:', error));
+		}
+	</script>
+</body>
+</html>
