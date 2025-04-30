@@ -68,15 +68,15 @@ cd laptophub
 ### ขั้นตอนที่ 2: รันแต่ละแอปพลิเคชัน
 
 #### รัน Laptop Store
-```bash
+```cmd
 cd laptop-store
-./mvnw spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 #### รัน Laptop Customer
-```bash
+```cmd
 cd laptop-customer
-./mvnw spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 ---
@@ -230,15 +230,15 @@ cd laptophub
 ### Step 2: Run Each Application
 
 #### Run Laptop Store
-```bash
+```cmd
 cd laptop-store
-./mvnw spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 #### Run Laptop Customer
-```bash
+```cmd
 cd laptop-customer
-./mvnw spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 ---
