@@ -68,15 +68,27 @@ cd laptophub
 ### ขั้นตอนที่ 2: รันแต่ละแอปพลิเคชัน
 
 #### รัน Laptop Store
+- **บน Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
 mvnw.cmd spring-boot:run
 ```
+- **บน Terminal (Linux/MacOS)**:
+```bash
+cd laptop-store
+./mvnw spring-boot:run
+```
 
 #### รัน Laptop Customer
+- **บน Command Prompt (Windows)**:
 ```cmd
 cd laptop-customer
 mvnw.cmd spring-boot:run
+```
+- **บน Terminal (Linux/MacOS)**:
+```bash
+cd laptop-customer
+./mvnw spring-boot:run
 ```
 
 ---
@@ -230,15 +242,27 @@ cd laptophub
 ### Step 2: Run Each Application
 
 #### Run Laptop Store
+- **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
 mvnw.cmd spring-boot:run
 ```
+- **On Terminal (Linux/MacOS)**:
+```bash
+cd laptop-store
+./mvnw spring-boot:run
+```
 
 #### Run Laptop Customer
+- **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-customer
 mvnw.cmd spring-boot:run
+```
+- **On Terminal (Linux/MacOS)**:
+```bash
+cd laptop-customer
+./mvnw spring-boot:run
 ```
 
 ---
