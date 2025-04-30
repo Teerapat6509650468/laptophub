@@ -61,7 +61,7 @@
 
 ### ขั้นตอนที่ 1: Clone Repository
 ```bash
-git clone https://github.com/yourusername/laptophub.git
+git clone https://github.com/Teerapat6509650468/laptophub.git
 cd laptophub
 ```
 
@@ -235,7 +235,7 @@ The two applications communicate using **REST APIs** via `RestTemplate`:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/laptophub.git
+git clone https://github.com/Teerapat6509650468/laptophub.git
 cd laptophub
 ```
 
