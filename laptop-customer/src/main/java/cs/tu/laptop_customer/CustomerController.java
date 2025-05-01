@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private static boolean dataRequested = false;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -22,8 +23,14 @@ public class CustomerController {
 
     @GetMapping()
     public ResponseEntity<Iterable<Customer>> getAllCustomers() {
+        dataRequested = true;
         Iterable<Customer> customers = customerService.getAllCustomers();
         return new ResponseEntity<>(customers, HttpStatus.OK);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<Boolean> getDataRequestStatus() {
+        return ResponseEntity.ok(dataRequested);
     }
 
     @PostMapping("/addCustomer")

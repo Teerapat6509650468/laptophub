@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="customerCard" style="display: none;">
             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title mb-0">Customer List</h3>
             </div>
@@ -70,20 +70,40 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchCustomers();
-        });
+        // Check localStorage and URL parameters on page load
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldFetch = urlParams.get('fetch') === 'true';
+            
+            if (shouldFetch) {
+                checkAndFetchCustomers();
+            } else {
+                document.getElementById('customerCard').style.display = 'none';
+            }
+        };
 
-        async function fetchCustomers() {
+        async function checkAndFetchCustomers() {
             const loadingDiv = document.getElementById('loading');
             const errorDiv = document.getElementById('error');
-            const tableBody = document.getElementById('customerTableBody');
-            
+            const customerCard = document.getElementById('customerCard');
+
             try {
                 loadingDiv.style.display = 'block';
                 errorDiv.style.display = 'none';
-                tableBody.innerHTML = '';
-                
+                customerCard.style.display = 'block'; // Always show the card
+
+                // Check if data has been requested
+                const statusResponse = await fetch('http://localhost:8081/customers/status');
+                const dataRequested = await statusResponse.json();
+
+                if (!dataRequested) {
+                    errorDiv.innerHTML = '<div class="alert alert-warning">Please click "Request all customer data" in the Laptop Customer application first.</div>';
+                    errorDiv.style.display = 'block';
+                    updateTable([]); // Show empty table
+                    return;
+                }
+
+                // If data has been requested, fetch the customers
                 const response = await fetch('http://localhost:8080/client/customers');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -93,13 +113,13 @@
                 if (customers.length === 0) {
                     errorDiv.innerHTML = '<div class="alert alert-warning">No customers found in the system.</div>';
                     errorDiv.style.display = 'block';
-                    return;
                 }
                 updateTable(customers);
             } catch (error) {
-                console.error('Error fetching customers:', error);
+                console.error('Error:', error);
                 errorDiv.innerHTML = '<div class="alert alert-danger">Failed to fetch customer information. Please try again later.</div>';
                 errorDiv.style.display = 'block';
+                updateTable([]); // Show empty table on error
             } finally {
                 loadingDiv.style.display = 'none';
             }
