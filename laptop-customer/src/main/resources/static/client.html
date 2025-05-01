@@ -100,9 +100,15 @@
                 }
                 
                 const laptops = await response.json();
+                if (laptops.length === 0) {
+                    errorDiv.innerHTML = '<div class="alert alert-warning">No laptops available. Please make sure to click "Request All Laptop Information" in the Laptop Store first.</div>';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
                 updateTable(laptops);
             } catch (error) {
                 console.error('Error fetching laptops:', error);
+                errorDiv.innerHTML = '<div class="alert alert-danger">Failed to fetch laptop information. Please try again later.</div>';
                 errorDiv.style.display = 'block';
             } finally {
                 loadingDiv.style.display = 'none';

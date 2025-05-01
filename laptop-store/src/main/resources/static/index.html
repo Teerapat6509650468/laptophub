@@ -46,14 +46,21 @@
         document.getElementById('reserveLaptopBtn').addEventListener('click', showReservationList);
 
         function requestAllLaptops() {
-            fetch('http://localhost:8080/laptops')
-                .then(response => response.json())
-                .then(laptops => {
-                    // Show an alert instead of opening a new window
-                    alert('Retrieved information for ' + laptops.length + ' laptops');
-                })
-                .catch(error => console.error('Error fetching laptops:', error));
-        }
+        fetch('http://localhost:8080/laptops/enable-display', {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                return fetch('http://localhost:8080/laptops');
+            }
+            throw new Error('Failed to enable laptop display');
+        })
+        .then(response => response.json())
+        .then(laptops => {
+            alert('Retrieved information for ' + laptops.length + ' laptops');
+        })
+        .catch(error => console.error('Error:', error));
+    }
 
         function showReservationList() {
             const laptopListDiv = document.getElementById('laptopList');

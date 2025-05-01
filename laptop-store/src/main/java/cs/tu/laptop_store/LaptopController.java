@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -13,6 +14,7 @@ import java.util.List;
 public class LaptopController {
 
     private final LaptopService laptopService;
+    private boolean laptopsDisplayEnabled = false;
 
     @Autowired
     public LaptopController(LaptopService laptopService) {
@@ -21,7 +23,16 @@ public class LaptopController {
 
     @GetMapping
     public List<Laptop> getAllLaptops() {
+        if (!laptopsDisplayEnabled) {
+            return new ArrayList<>();
+        }
         return laptopService.getAllLaptops();
+    }
+
+    @PostMapping("/enable-display")
+    public ResponseEntity<String> enableLaptopDisplay() {
+        laptopsDisplayEnabled = true;
+        return ResponseEntity.ok("Laptop display enabled");
     }
 
     @PostMapping("/{id}/reserve")
