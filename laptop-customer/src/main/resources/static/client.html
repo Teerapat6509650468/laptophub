@@ -17,11 +17,38 @@
             color: #dc3545;
             font-weight: bold;
         }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .error-message {
+            display: none;
+            color: #dc3545;
+            padding: 20px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <h1 class="text-center mb-4">Laptop Store Client View</h1>
+        
+        <!-- Loading indicator -->
+        <div id="loading" class="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Fetching laptop information...</p>
+        </div>
+
+        <!-- Error message -->
+        <div id="error" class="error-message">
+            <div class="alert alert-danger">
+                Failed to fetch laptop information. Please try again later.
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <h3 class="card-title mb-0">Available Laptops</h3>
@@ -51,24 +78,37 @@
     </div>
 
     <script>
-        // Function to refresh laptop data every 5 seconds
-        function startAutoRefresh() {
-            fetchLaptops(); // Initial fetch
-            setInterval(fetchLaptops, 5000); // Refresh every 5 seconds
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the trigger parameter from URL
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('fetch') === 'true') {
+                fetchLaptops();
+            }
+        });
 
-        // Fetch laptops from the server
         async function fetchLaptops() {
+            const loadingDiv = document.getElementById('loading');
+            const errorDiv = document.getElementById('error');
+            
             try {
+                loadingDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                
                 const response = await fetch('http://localhost:8081/client/laptops');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
                 const laptops = await response.json();
                 updateTable(laptops);
             } catch (error) {
                 console.error('Error fetching laptops:', error);
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
             }
         }
 
-        // Update the table with laptop data
         function updateTable(laptops) {
             const tableBody = document.getElementById('laptopTableBody');
             tableBody.innerHTML = '';
@@ -92,9 +132,6 @@
                 tableBody.appendChild(row);
             });
         }
-
-        // Start the auto-refresh when the page loads
-        document.addEventListener('DOMContentLoaded', startAutoRefresh);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

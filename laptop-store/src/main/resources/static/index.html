@@ -49,8 +49,8 @@
             fetch('http://localhost:8080/laptops')
                 .then(response => response.json())
                 .then(laptops => {
-                    // Open the customer system in a new window
-                    window.open('http://localhost:8081', '_blank');
+                    // Show an alert instead of opening a new window
+                    alert('Retrieved information for ' + laptops.length + ' laptops');
                 })
                 .catch(error => console.error('Error fetching laptops:', error));
         }
