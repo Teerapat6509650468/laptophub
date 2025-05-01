@@ -61,7 +61,7 @@
 
 ### ขั้นตอนที่ 1: Clone Repository
 ```bash
-git clone https://github.com/yourusername/laptophub.git
+git clone https://github.com/Teerapat6509650468/laptophub.git
 cd laptophub
 ```
 
@@ -71,12 +71,12 @@ cd laptophub
 - **บน Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **บน Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-store
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 #### รัน Laptop Customer
@@ -235,7 +235,7 @@ The two applications communicate using **REST APIs** via `RestTemplate`:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/yourusername/laptophub.git
+git clone https://github.com/Teerapat6509650468/laptophub.git
 cd laptophub
 ```
 
@@ -245,24 +245,24 @@ cd laptophub
 - **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-store
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **On Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-store
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 #### Run Laptop Customer
 - **On Command Prompt (Windows)**:
 ```cmd
 cd laptop-customer
-mvnw.cmd spring-boot:run
+mvnw.cmd clean spring-boot:run
 ```
 - **On Terminal (Linux/MacOS)**:
 ```bash
 cd laptop-customer
-./mvnw spring-boot:run
+./mvnw clean spring-boot:run
 ```
 
 ---
