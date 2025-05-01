@@ -35,6 +35,7 @@
         <div class="text-center mt-4">
             <button id="requestInfoBtn" class="btn btn-primary">Request All Laptop Information</button>
             <button id="reserveLaptopBtn" class="btn btn-success">Reserve Laptop</button>
+            <button id="openClient" class="btn btn-info text-white">Client</button>
         </div>
         <div class="mt-4" id="laptopList" style="display: none;">
             <!-- Laptop list will be displayed here -->
@@ -44,6 +45,10 @@
     <script>
         document.getElementById('requestInfoBtn').addEventListener('click', requestAllLaptops);
         document.getElementById('reserveLaptopBtn').addEventListener('click', showReservationList);
+
+        document.getElementById('openClient').addEventListener('click', () => {
+            window.location.href = 'client.html';
+        });
 
         function requestAllLaptops() {
         fetch('http://localhost:8080/laptops/enable-display', {
