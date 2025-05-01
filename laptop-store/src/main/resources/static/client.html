@@ -97,7 +97,7 @@
                 const dataRequested = await statusResponse.json();
 
                 if (!dataRequested) {
-                    errorDiv.innerHTML = '<div class="alert alert-warning">Please click "Request all customer data" in the Laptop Customer application first.</div>';
+                    errorDiv.innerHTML = '<div class="alert alert-warning">No customers available. Please make sure to click "Request All Customer Information" in the Laptop Customer first.</div>';
                     errorDiv.style.display = 'block';
                     updateTable([]); // Show empty table
                     return;
