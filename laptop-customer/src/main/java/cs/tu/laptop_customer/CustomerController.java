@@ -16,6 +16,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private static boolean dataRequested = false;
+    private static boolean customerAdditionEnabled = false;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -35,7 +36,21 @@ public class CustomerController {
 
     @PostMapping("/addCustomer")
     public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) {
+        if (!customerAdditionEnabled) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Customer savedCustomer = customerService.addCustomer(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/enable-addition")
+    public ResponseEntity<String> enableCustomerAddition() {
+        customerAdditionEnabled = true;
+        return ResponseEntity.ok("Customer addition enabled");
+    }
+
+    @GetMapping("/addition-status")
+    public ResponseEntity<Boolean> getCustomerAdditionStatus() {
+        return ResponseEntity.ok(customerAdditionEnabled);
     }
 }
