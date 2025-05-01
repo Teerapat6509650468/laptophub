@@ -37,98 +37,48 @@
             <button id="reserveLaptopBtn" class="btn btn-success">Reserve Laptop</button>
             <button id="openClient" class="btn btn-info text-white">Client</button>
         </div>
-        <div class="mt-4" id="laptopList" style="display: none;">
-            <!-- Laptop list will be displayed here -->
-        </div>
     </div>
 
     <script>
         document.getElementById('requestInfoBtn').addEventListener('click', requestAllLaptops);
-        document.getElementById('reserveLaptopBtn').addEventListener('click', showReservationList);
+        document.getElementById('reserveLaptopBtn').addEventListener('click', enableReservation);
 
         document.getElementById('openClient').addEventListener('click', () => {
-            window.location.href = 'client.html';
+            window.location.href = 'client.html?fetch=true';
         });
 
         function requestAllLaptops() {
-        fetch('http://localhost:8080/laptops/enable-display', {
-            method: 'POST'
-        })
-        .then(response => {
-            if (response.ok) {
-                return fetch('http://localhost:8080/laptops');
-            }
-            throw new Error('Failed to enable laptop display');
-        })
-        .then(response => response.json())
-        .then(laptops => {
-            alert('Retrieved information for ' + laptops.length + ' laptops');
-        })
-        .catch(error => console.error('Error:', error));
-    }
-
-        function showReservationList() {
-            const laptopListDiv = document.getElementById('laptopList');
-            laptopListDiv.style.display = 'block';
-
-            fetch('http://localhost:8080/laptops')
-                .then(response => response.json())
-                .then(laptops => {
-                    laptopListDiv.innerHTML = laptops.map(laptop => `
-                        <div class="laptop-item ${laptop.reserved ? 'reserved' : ''}">
-                            <h4>${laptop.brand} ${laptop.model}</h4>
-                            <table class="specs-table">
-                                <tr>
-                                    <td>Processor:</td>
-                                    <td>${laptop.processor}</td>
-                                </tr>
-                                <tr>
-                                    <td>RAM:</td>
-                                    <td>${laptop.ram} GB</td>
-                                </tr>
-                                <tr>
-                                    <td>Storage:</td>
-                                    <td>${laptop.storage} GB</td>
-                                </tr>
-                                <tr>
-                                    <td>Price:</td>
-                                    <td>$${laptop.price.toFixed(2)}</td>
-                                </tr>
-                                <tr>
-                                    <td>Status:</td>
-                                    <td>${laptop.reserved ? 'Reserved' : 'Available'}</td>
-                                </tr>
-                            </table>
-                            <div class="text-end mt-2">
-                                ${!laptop.reserved ? 
-                                    `<button class="btn btn-primary reserve-btn" onclick="reserveLaptop(${laptop.id})">
-                                        Reserve
-                                    </button>` : 
-                                    '<button class="btn btn-secondary" disabled>Reserved</button>'
-                                }
-                            </div>
-                        </div>
-                    `).join('');
-                })
-                .catch(error => console.error('Error fetching laptops:', error));
-        }
-
-        function reserveLaptop(laptopId) {
-            fetch(`http://localhost:8080/laptops/${laptopId}/reserve`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+            fetch('http://localhost:8080/laptops/enable-display', {
+                method: 'POST'
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Laptop reserved successfully!');
-                    showReservationList(); // Refresh the list
+                    return fetch('http://localhost:8080/laptops');
+                }
+                throw new Error('Failed to enable laptop display');
+            })
+            .then(response => response.json())
+            .then(laptops => {
+                alert('Retrieved information for ' + laptops.length + ' laptops');
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function enableReservation() {
+            fetch('http://localhost:8080/laptops/enable-reservation', {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Laptop reservation has been enabled. Customers can now reserve laptops.');
                 } else {
-                    alert('Failed to reserve laptop.');
+                    throw new Error('Failed to enable reservations');
                 }
             })
-            .catch(error => console.error('Error reserving laptop:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to enable reservations.');
+            });
         }
     </script>
 

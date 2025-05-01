@@ -28,6 +28,10 @@
             padding: 20px;
             text-align: center;
         }
+        .reserve-disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -66,6 +70,7 @@
                                 <th>Storage (GB)</th>
                                 <th>Price ($)</th>
                                 <th>Available</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="laptopTableBody">
@@ -78,19 +83,57 @@
     </div>
 
     <script>
+        let reservationEnabled = false;
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Get the trigger parameter from URL
             const params = new URLSearchParams(window.location.search);
             if (params.get('fetch') === 'true') {
+                checkReservationStatus();
                 fetchLaptops();
             }
         });
+
+        async function checkReservationStatus() {
+            try {
+                const response = await fetch('http://localhost:8080/laptops/reservation-status');
+                if (response.ok) {
+                    reservationEnabled = await response.json();
+                }
+            } catch (error) {
+                console.error('Error checking reservation status:', error);
+            }
+        }
+
+        async function reserveLaptop(id) {
+            if (!reservationEnabled) {
+                alert('Reservations are not enabled yet. Please wait for the store to enable reservations.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8081/client/laptops/${id}/reserve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to reserve laptop');
+                }
+                alert('Laptop reserved successfully!');
+                fetchLaptops(); // Refresh the list
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to reserve laptop');
+            }
+        }
 
         async function fetchLaptops() {
             const loadingDiv = document.getElementById('loading');
             const errorDiv = document.getElementById('error');
             
             try {
+                await checkReservationStatus();
                 loadingDiv.style.display = 'block';
                 errorDiv.style.display = 'none';
                 
@@ -123,6 +166,9 @@
                 const row = document.createElement('tr');
                 row.className = laptop.reserved ? 'reserved' : '';
                 
+                const reserveButtonClass = !reservationEnabled ? 'btn-secondary reserve-disabled' : 'btn-primary';
+                const reserveButtonDisabled = !reservationEnabled || laptop.reserved;
+                
                 row.innerHTML = `
                     <td>${laptop.id}</td>
                     <td>${laptop.brand}</td>
@@ -133,6 +179,13 @@
                     <td>${laptop.price.toFixed(2)}</td>
                     <td class="${laptop.reserved ? 'status-no' : 'status-yes'}">
                         ${laptop.reserved ? 'No' : 'Yes'}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm ${reserveButtonClass}" 
+                                onclick="reserveLaptop(${laptop.id})"
+                                ${reserveButtonDisabled ? 'disabled' : ''}>
+                            ${laptop.reserved ? 'Reserved' : 'Reserve'}
+                        </button>
                     </td>
                 `;
                 tableBody.appendChild(row);
